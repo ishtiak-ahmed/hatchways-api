@@ -15,6 +15,6 @@
     [x]3. Send data with first query
     [x]4. Filter data
     [x]5. Sort data
-    [ ]6. Remove Duplicate
-    [ ]7. Loop through tags
+    [x]6. Remove Duplicate - I have to spend some time for this
+    [x]7. Loop through tags - This step takes some time too
     [ ]8. Query Validate
