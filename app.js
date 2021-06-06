@@ -6,6 +6,7 @@ const app = express()
 app.use(cors())
 const port = 3000
 
+// To fetch data from original API
 async function fetchData(tag) {
     const url = `https://api.hatchways.io/assessment/blog/posts?tag=${tag}`
     const post = await fetch(url)
@@ -14,6 +15,7 @@ async function fetchData(tag) {
     return post.posts;
 }
 
+// Loop through all tags
 async function getPosts(arr) {
     let allPosts = []
     for (let i = 0; i < arr.length; i++) {
@@ -23,6 +25,7 @@ async function getPosts(arr) {
     return allPosts
 }
 
+// Remove Duplicate Post
 const removeDuplicate = (arr) => {
     let obj = {};
     const len = arr.length;
@@ -34,11 +37,12 @@ const removeDuplicate = (arr) => {
     return newArr;
 }
 
-
+// Route 1
 app.get('/blog/ping', (req, res) => {
     res.status(200).send({ success: true })
 })
 
+// Route 2 with Query Data
 app.get('/blog/posts', async (req, res) => {
     const tags = (req.query.tags.split(','));
     const sortBy = req.query.sortBy
@@ -50,6 +54,4 @@ app.get('/blog/posts', async (req, res) => {
     }))
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+app.listen(port)
