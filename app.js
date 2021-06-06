@@ -1,10 +1,9 @@
-
 const express = require('express')
 const cors = require('cors')
 const fetch = require('node-fetch')
 const app = express()
 app.use(cors())
-const port = 3000
+const port = 4000
 
 // To fetch data from original API
 async function fetchData(tag) {
@@ -44,14 +43,25 @@ app.get('/blog/ping', (req, res) => {
 
 // Route 2 with Query Data
 app.get('/blog/posts', async (req, res) => {
-    const tags = (req.query.tags.split(','));
-    const sortBy = req.query.sortBy
-    const direction = req.query.direction || 'asc'
-    let allPosts = await getPosts(tags)
-    const uniquePosts = removeDuplicate(allPosts)
-    res.send(uniquePosts.sort((a, b) => {
-        return (direction === 'dsc' ? (b[sortBy] - a[sortBy]) : (a[sortBy] - b[sortBy]))
-    }))
+    if (!req.query.tags) {
+        res.status(400).send({ "error": "Tags parameter is required" })
+    } else {
+        const acceptableSortValue = ['id', 'likes', 'reads', 'popularity', undefined]
+        const directionValues = ['desc', 'asc']
+        const tags = (req.query.tags.split(','));
+        const sortBy = req.query.sortBy
+        const direction = req.query.direction || 'asc'
+        if (
+            acceptableSortValue.indexOf(sortBy) < 0 ||
+            directionValues.indexOf(direction) < 0) {
+            res.status(400).send({ "error": "sortBy parameter is invalid" })
+        }
+        let allPosts = await getPosts(tags)
+        const uniquePosts = removeDuplicate(allPosts)
+        res.status(200).send(uniquePosts.sort((a, b) => {
+            return (direction === 'desc' ? (b[sortBy] - a[sortBy]) : (a[sortBy] - b[sortBy]))
+        }))
+    }
 })
 
 app.listen(port)
