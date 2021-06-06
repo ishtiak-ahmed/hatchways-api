@@ -12,7 +12,6 @@
   "author": "Ishtiak Ahmed",
   "license": "ISC",
   "dependencies": {
-    "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
