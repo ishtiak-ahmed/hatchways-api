@@ -27,12 +27,8 @@ async function getPosts(arr) {
 // Remove Duplicate Post
 const removeDuplicate = (arr) => {
     let obj = {};
-    const len = arr.length;
-    for (let i = 0; i < len; i++)
-        obj[arr[i]['id']] = arr[i];
-    let newArr = new Array();
-    for (let key in obj)
-        newArr.push(obj[key]);
+    arr.forEach(item => obj[item['id']] = item);
+    let newArr = Object.values(obj)
     return newArr;
 }
 
