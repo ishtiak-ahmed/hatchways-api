@@ -1,6 +1,8 @@
 const express = require('express')
 const cors = require('cors')
 const fetch = require('node-fetch')
+// const nodeCache = require('node-cache')
+// const myCache = new nodeCache()
 const app = express()
 app.use(cors())
 const port = 4000
@@ -26,10 +28,9 @@ async function getPosts(arr) {
 
 // Remove Duplicate Post
 const removeDuplicate = (arr) => {
-    let obj = {};
+    const obj = {};
     arr.forEach(item => obj[item['id']] = item);
-    let newArr = Object.values(obj)
-    return newArr;
+    return Object.values(obj)
 }
 
 // Route 1
@@ -52,13 +53,14 @@ app.get('/api/posts', async (req, res) => {
             directionValues.indexOf(direction) < 0) {
             res.status(400).send({ "error": "sortBy parameter is invalid" })
         }
-        let allPosts = await getPosts(tags)
+        const allPosts = await getPosts(tags)
         const uniquePosts = removeDuplicate(allPosts)
-        const posts = uniquePosts.sort((a, b) => {
+        const sortedPosts = uniquePosts.sort((a, b) => {
             return (direction === 'desc' ? (b[sortBy] - a[sortBy]) : (a[sortBy] - b[sortBy]))
         })
-        res.status(200).send({ posts: posts })
+        res.status(200).send({ posts: sortedPosts })
     }
 })
+
 
 app.listen(port)
