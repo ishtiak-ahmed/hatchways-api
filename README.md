@@ -18,4 +18,3 @@
     [x]6. Remove Duplicate - I have to spend some time for this
     [x]7. Loop through tags - This step takes some time too
     [x]8. Query Validate
-    [ ]9. I may do this tommorrow
