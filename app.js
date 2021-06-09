@@ -37,12 +37,12 @@ const removeDuplicate = (arr) => {
 }
 
 // Route 1
-app.get('/blog/ping', (req, res) => {
+app.get('/api/ping', (req, res) => {
     res.status(200).send({ success: true })
 })
 
 // Route 2 with Query Data
-app.get('/blog/posts', async (req, res) => {
+app.get('/api/posts', async (req, res) => {
     if (!req.query.tags) {
         res.status(400).send({ "error": "Tags parameter is required" })
     } else {
@@ -58,9 +58,10 @@ app.get('/blog/posts', async (req, res) => {
         }
         let allPosts = await getPosts(tags)
         const uniquePosts = removeDuplicate(allPosts)
-        res.status(200).send(uniquePosts.sort((a, b) => {
+        const posts = uniquePosts.sort((a, b) => {
             return (direction === 'desc' ? (b[sortBy] - a[sortBy]) : (a[sortBy] - b[sortBy]))
-        }))
+        })
+        res.status(200).send({ posts: posts })
     }
 })
 
