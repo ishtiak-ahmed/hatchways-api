@@ -8,14 +8,12 @@ const port = 4000
 // Loop through all tags
 function getPosts(arr) {
     const urls = arr.map(tag => {
-        const url = `https://api.hatchways.io/assessment/blog/posts?tag=${tag}`
-        return url
+        return `https://api.hatchways.io/assessment/blog/posts?tag=${tag}`
     })
     return Promise.all(urls.map(u => fetch(u))).then(responses =>
         Promise.all(responses.map(res => res.json())).then(data => {
             const arraysOfPosts = (data.map(post => post.posts))
-            const merged = [].concat.apply([], arraysOfPosts)
-            return merged;
+            return ([].concat.apply([], arraysOfPosts))
         })
     )
 }
