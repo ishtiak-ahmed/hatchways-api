@@ -1,29 +1,23 @@
 const express = require('express')
 const cors = require('cors')
 const fetch = require('node-fetch')
-// const nodeCache = require('node-cache')
-// const myCache = new nodeCache()
 const app = express()
 app.use(cors())
 const port = 4000
 
-// To fetch data from original API
-async function fetchData(tag) {
-    const url = `https://api.hatchways.io/assessment/blog/posts?tag=${tag}`
-    const post = await fetch(url)
-        .then(res => res.json())
-        .catch(err => console.log(err))
-    return post.posts;
-}
-
 // Loop through all tags
-async function getPosts(arr) {
-    let allPosts = []
-    for (let i = 0; i < arr.length; i++) {
-        const post = await fetchData(arr[i])
-        allPosts = [...allPosts, ...post]
-    }
-    return allPosts
+function getPosts(arr) {
+    const urls = arr.map(tag => {
+        const url = `https://api.hatchways.io/assessment/blog/posts?tag=${tag}`
+        return url
+    })
+    return Promise.all(urls.map(u => fetch(u))).then(responses =>
+        Promise.all(responses.map(res => res.json())).then(data => {
+            const arraysOfPosts = (data.map(post => post.posts))
+            const merged = [].concat.apply([], arraysOfPosts)
+            return merged;
+        })
+    )
 }
 
 // Remove Duplicate Post
@@ -61,6 +55,5 @@ app.get('/api/posts', async (req, res) => {
         res.status(200).send({ posts: sortedPosts })
     }
 })
-
 
 app.listen(port)

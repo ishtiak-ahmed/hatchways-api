@@ -19,3 +19,10 @@
     [x]7. Loop through tags - This step takes some time too
     [x]8. Query Validate
     [ ]9. Caching API data
+
+## Feedback (Need To Do)
+
+    1. We noticed that the names you choose for some of your variables and functions were non-descriptive or inaccurate.
+    2. The organization of your application could have been improved.
+    3. We noticed that you didn't add caching to your assessment.
+    4. It would have been nice to see some unit tests for your submission.
